@@ -3,8 +3,11 @@ title: "Statistical Inference - Basic Inferential Data Analysis"
 author: "Abdul Rasheed Narejo"
 date: "18/09/2018"
 output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
   pdf_document: default
-  html_document: default
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -26,7 +29,9 @@ In the second portion of the project, we're going to analyze the ToothGrowth dat
 ### About the data
 The database contains 60 observations to check the impact on tooth growth (len variable) from Vitamin C delivered by one of two delivery methods - orange juice (OJ), ascorbic acid (CV). There are 30 observations for each method of delivery with 10 observations for each dosage (0.5, 1, 2).
 
-## Load data and perform some basic exploratory data analysis
+## exploratory data analysis
+
+### Load data
 ```{r}
 data("ToothGrowth")
 str(ToothGrowth)
