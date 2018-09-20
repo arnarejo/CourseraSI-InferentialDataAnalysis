@@ -1,0 +1,97 @@
+---
+title: "Statistical Inference - Basic Inferential Data Analysis"
+author: "Abdul Rasheed Narejo"
+date: "18/09/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load libraries
+library(ggplot2) # for visualization
+```
+
+## Basic inferential data analysis
+In the second portion of the project, we're going to analyze the ToothGrowth data in the R datasets package.
+
+1. Load the ToothGrowth data and perform some basic exploratory data analyses
+2. Provide a basic summary of the data.
+3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+4. State your conclusions and the assumptions needed for your conclusions.
+
+### About the data
+The database contains 60 observations to check the impact on response variabl tooth growth (len variable) from Vitamin C delivered by one of two delivery methods - orange juice (OJ), ascorbic acid (CV). There are 30 observations for each method of delivery with 10 observations for each dosage (0.5, 1, 2).
+
+## Load data and perform some basic exploratory data analysis
+```{r}
+data("ToothGrowth")
+str(ToothGrowth)
+```
+
+### Provide basic summary of data
+```{r}
+summary(ToothGrowth)
+```
+
+## Hypothesis Testing
+
+### Hypothesis testing 1: Does supplement type affect tooth growth?
+
+**Null Hypothesis:** Supplement type (OC, VJ) does not affect delivery method.  
+**Alternative Hypothesis:** Supplement type affects delivery method.
+
+### visualize data
+```{r, fig.height = 4, fig.width=6}
+ggplot(ToothGrowth, aes(x=factor(supp), y=len,fill=supp)) +
+    geom_boxplot()
+```
+
+### break data by supplement type
+```{r}
+OJ <- subset(ToothGrowth, supp == "OJ", select = len)
+VC <- subset(ToothGrowth, supp == "VC", select = len)
+```
+
+### t.test
+```{r}
+t <- t.test(OJ, VC, paired = FALSE)$p.value
+t
+```
+
+### Hypothesis testing 2: Does dose affect tooth growth?
+
+**Null Hypothesis:** Supplement dose (0.5, 1, 2) doesnot affect tooth growth  
+**Alternative Hypothesis:** Supplement dose affects tooth growth
+
+### visualize data
+```{r, fig.height = 4, fig.width=6}
+ggplot(ToothGrowth, aes(x=factor(dose), y=len,fill=factor(dose))) +
+     geom_boxplot()
+```
+
+### break data by dose level
+```{r}
+dose1 <- subset(ToothGrowth, dose == 0.5)$len
+dose2 <- subset(ToothGrowth, dose == 1)$len
+dose3 <- subset(ToothGrowth, dose == 2)$len
+```
+
+### t.test
+```{r}
+t1 <- t.test(dose1, dose2, paired = FALSE)$p.value
+t2 <- t.test(dose1, dose3, paired = FALSE)$p.value
+t3 <- t.test(dose2, dose3, paired = FALSE)$p.value
+t1; t2; t3
+```
+
+### Conclusion
+**For hypothesis 1 - does delivery method (irrespective of dose) affect tooth growth ?**
+we have failed to reject null hypothesis as p-values `r t` is greater than 0.05. Hence, delivery method does not have significant impact on tooth growth.
+
+**For hypothesis 2 - does dose affect tooth growth ?**
+we have conducted three separate t.tests to compare effect of different doses on tooth growth. Based on p-values, we reject null hypothesis. There is significant difference in tooth growth for various supplement doses.
